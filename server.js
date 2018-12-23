@@ -2,7 +2,7 @@ var app = require('express')();
 var server = require('http').Server(app);
 var io = require('socket.io')(server);
 var fs = require('fs');
-const BASE_URL="http://localhost:9000/"
+const BASE_URL="http://18.222.189.69:9000/"
  
 
 
