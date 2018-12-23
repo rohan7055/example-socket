@@ -1,0 +1,82 @@
+<!doctype html>
+<html>
+<head>
+    
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" />
+    </head>
+<body>
+    
+<form id="my-form">
+<textarea id="message" placeholder="Message"></textarea>
+<p>
+<button type="submit">Send</button>
+</p>
+</form>
+
+<div id="messages"></div>
+<script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
+<script src="http://localhost:5000/socket.io/socket.io.js"></script>
+<script>
+        var socket = io('http://localhost:5000');
+        socket.on('connect', function () {
+
+            document
+                .getElementById('my-form')
+                .addEventListener('submit', function (e) {
+                   e.preventDefault();
+                   socket.emit('sendquery',document.getElementById('message').value);
+                });
+
+            /*socket.on('message', function (message) {
+                var messageNode = document.createTextNode(message),
+                    messageElement = document.createElement('p');
+
+                messageElement.appendChild(messageNode);
+
+                document.getElementById('messages').appendChild(messageElement);
+            });*/
+            
+            
+             socket.on('completedquery', function (message) {
+                alert("Completed "+message.url)
+                 console.log(message.url)
+               download(message.url,"Big.txt")
+            });
+            
+          
+        });
+    
+      socket.on('seconds.update', function (data) {
+            var time = new Date(data.time);
+           $('h1').text(
+            time.getMonth() + '\/' + time.getDate() + '\/' + time.getFullYear() + ' ' +
+            time.getHours() + ':' + time.getMinutes() + ':' + time.getSeconds());
+           });
+    
+    function download(dataurl, filename) {
+  var a = document.createElement("a");
+  a.href = dataurl;
+  a.setAttribute("download", filename);
+  var b = document.createEvent("MouseEvents");
+  b.initEvent("click", false, true);
+  a.dispatchEvent(b);
+  return false;
+}
+
+    
+    
+</script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
